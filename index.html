@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .next-btn, .submit-btn {
+            background-color: #cc0000;
+            color: white;
+        }
+        .prev-btn {
+            background-color: #666;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .progress-bar {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            color: #666;
+        }
+        .progress-step.active {
+            color: #cc0000;
+            font-weight: bold;
+        }
+        .progress-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ddd;
+            z-index: -1;
+        }
+        .progress-step.active:not(:last-child):after {
+            background-color: #cc0000;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Blood Donor Registration</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-step active" id="step1-indicator">1. Name</div>
+            <div class="progress-step" id="step2-indicator">2. Blood Group</div>
+            <div class="progress-step" id="step3-indicator">3. Contact</div>
+            <div class="progress-step" id="step4-indicator">4. Address</div>
+        </div>
+        
+        <form id="donorForm">
+            <!-- Step 1: Name -->
+            <div class="form-step active" id="step1">
+                <div class="form-group">
+                    <label for="name">What is your full name?</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="next-btn" onclick="nextStep(1)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Blood Group -->
+            <div class="form-step" id="step2">
+                <div class="form-group">
+                    <label for="blood_group">What is your blood group?</label>
+                    <select id="blood_group" name="blood_group" required>
+                        <option value="">Select your blood group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="prev-btn" onclick="prevStep(2)">Previous</button>
+                    <button type="button" class="next-btn" onclick="nextStep(2)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Contact -->
+            <div class="form-step" id="step3">
+                <div class="form-group">
+                    <label for="contact_no">What is your contact number?</label>
+                    <input type="tel" id="contact_no" name="contact_no" required>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="prev-btn" onclick="prevStep(3)">Previous</button>
+                    <button type="button" class="next-btn" onclick="nextStep(3)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Address -->
+            <div class="form-step" id="step4">
+                <div class="form-group">
+                    <label for="address">What is your full address?</label>
+                    <textarea id="address" name="address" rows="4" required></textarea>
+                </div>
+                <div class="btn-container">
+                    <button type="button" class="prev-btn" onclick="prevStep(4)">Previous</button>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        function updateProgressBar(step) {
+            // Reset all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}-indicator`).classList.remove('active');
+            }
+            
+            // Activate current step
+            document.getElementById(`step${step}-indicator`).classList.add('active');
+        }
+        
+        function nextStep(current) {
+            // Validate current step before proceeding
+            if (current === 1 && !document.getElementById('name').value) {
+                alert('Please enter your name');
+                return;
+            }
+            if (current === 2 && !document.getElementById('blood_group').value) {
+                alert('Please select your blood group');
+                return;
+            }
+            if (current === 3 && !document.getElementById('contact_no').value) {
+                alert('Please enter your contact number');
+                return;
+            }
+            
+            // Hide current step
+            document.getElementById(`step${current}`).classList.remove('active');
+            
+            // Show next step
+            currentStep = current + 1;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(currentStep);
+        }
+        
+        function prevStep(current) {
+            // Hide current step
+            document.getElementById(`step${current}`).classList.remove('active');
+            
+            // Show previous step
+            currentStep = current - 1;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(currentStep);
+        }
+        
+        // Form submission
+        document.getElementById('donorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate address
+            if (!document.getElementById('address').value) {
+                alert('Please enter your address');
+                return;
+            }
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('name').value,
+                blood_group: document.getElementById('blood_group').value,
+                contact_no: document.getElementById('contact_no').value,
+                address: document.getElementById('address').value
+            };
+            
+            // Here you would typically send the data to a server
+            console.log('Form submitted:', formData);
+            
+            // Show success message
+            alert('Thank you for registering as a blood donor!');
+            
+            // Reset form (optional)
+            this.reset();
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = 1;
+            document.getElementById('step1').classList.add('active');
+            updateProgressBar(1);
+        });
+    </script>
+</body>
+</html>
