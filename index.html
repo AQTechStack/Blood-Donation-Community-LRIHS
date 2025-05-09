@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,28 +7,49 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .form-container {
             background-color: white;
-            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #d32f2f;
+            font-weight: bold;
         }
         h1 {
-            color: #cc0000;
-            text-align: center;
-            margin-bottom: 30px;
+            color: #d32f2f;
+            margin-bottom: 5px;
         }
-        .form-step {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        .form-step.active {
-            display: block;
+        .quote {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 3px solid #d32f2f;
         }
         .form-group {
             margin-bottom: 20px;
@@ -47,44 +68,48 @@
             font-size: 16px;
             box-sizing: border-box;
         }
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
+        textarea {
+            resize: vertical;
+            min-height: 100px;
         }
         button {
-            padding: 12px 25px;
+            background-color: #d32f2f;
+            color: white;
             border: none;
+            padding: 12px 20px;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
+            font-size: 16px;
+            width: 100%;
             transition: background-color 0.3s;
         }
-        .next-btn, .submit-btn {
-            background-color: #cc0000;
-            color: white;
-        }
-        .prev-btn {
-            background-color: #666;
-            color: white;
-        }
         button:hover {
-            opacity: 0.9;
+            background-color: #b71c1c;
+        }
+        .step {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .step.active {
+            display: block;
         }
         .progress-bar {
             display: flex;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .progress-step {
             flex: 1;
             text-align: center;
             padding: 10px;
             position: relative;
-            color: #666;
+            color: #999;
+            font-weight: bold;
         }
         .progress-step.active {
-            color: #cc0000;
-            font-weight: bold;
+            color: #d32f2f;
+        }
+        .progress-step.completed {
+            color: #4CAF50;
         }
         .progress-step:not(:last-child):after {
             content: '';
@@ -96,18 +121,47 @@
             background-color: #ddd;
             z-index: -1;
         }
-        .progress-step.active:not(:last-child):after {
-            background-color: #cc0000;
+        .progress-step.completed:not(:last-child):after {
+            background-color: #4CAF50;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .navigation-buttons button {
+            flex: 1;
+        }
+        .prev-btn {
+            background-color: #757575;
+        }
+        .prev-btn:hover {
+            background-color: #616161;
+        }
+        .islamic-quotes {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #404040;
+            text-align: right;
+            direction: rtl;
+            font-weight: 300;
+            align-items: center;
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h1>Blood Donor Registration</h1>
+        <div class="header">
+            <!-- Replace this with your actual logo -->
+            <div><img src="blood donation.png" alt="Organization Logo" class="logo"></div>
+            <h1>Blood Donor Registration</h1>
+            <div class="quote">"Your blood donation can save lives"</div>
+        </div>
         
         <div class="progress-bar">
             <div class="progress-step active" id="step1-indicator">1. Name</div>
@@ -118,20 +172,18 @@
         
         <form id="donorForm">
             <!-- Step 1: Name -->
-            <div class="form-step active" id="step1">
+            <div class="step active" id="step1">
                 <div class="form-group">
-                    <label for="name">What is your full name?</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
                 </div>
-                <div class="btn-container">
-                    <button type="button" class="next-btn" onclick="nextStep(1)">Next</button>
-                </div>
+                <button type="button" class="next-btn" onclick="nextStep()">Continue</button>
             </div>
             
             <!-- Step 2: Blood Group -->
-            <div class="form-step" id="step2">
+            <div class="step" id="step2">
                 <div class="form-group">
-                    <label for="blood_group">What is your blood group?</label>
+                    <label for="blood_group">Blood Group</label>
                     <select id="blood_group" name="blood_group" required>
                         <option value="">Select your blood group</option>
                         <option value="A+">A+</option>
@@ -144,121 +196,141 @@
                         <option value="O-">O-</option>
                     </select>
                 </div>
-                <div class="btn-container">
-                    <button type="button" class="prev-btn" onclick="prevStep(2)">Previous</button>
-                    <button type="button" class="next-btn" onclick="nextStep(2)">Next</button>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" onclick="prevStep()">Back</button>
+                    <button type="button" class="next-btn" onclick="nextStep()">Continue</button>
                 </div>
             </div>
             
             <!-- Step 3: Contact -->
-            <div class="form-step" id="step3">
+            <div class="step" id="step3">
                 <div class="form-group">
-                    <label for="contact_no">What is your contact number?</label>
-                    <input type="tel" id="contact_no" name="contact_no" required>
+                    <label for="contact_no">Contact Number</label>
+                    <input type="tel" id="contact_no" name="contact_no" required placeholder="Enter your phone number">
                 </div>
-                <div class="btn-container">
-                    <button type="button" class="prev-btn" onclick="prevStep(3)">Previous</button>
-                    <button type="button" class="next-btn" onclick="nextStep(3)">Next</button>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" onclick="prevStep()">Back</button>
+                    <button type="button" class="next-btn" onclick="nextStep()">Continue</button>
                 </div>
             </div>
             
             <!-- Step 4: Address -->
-            <div class="form-step" id="step4">
+            <div class="step" id="step4">
                 <div class="form-group">
-                    <label for="address">What is your full address?</label>
-                    <textarea id="address" name="address" rows="4" required></textarea>
+                    <label for="address">Full Address</label>
+                    <textarea id="address" name="address" required placeholder="Enter your complete address"></textarea>
                 </div>
-                <div class="btn-container">
-                    <button type="button" class="prev-btn" onclick="prevStep(4)">Previous</button>
+                <div class="navigation-buttons">
+                    <button type="button" class="prev-btn" onclick="prevStep()">Back</button>
                     <button type="submit" class="submit-btn">Submit</button>
                 </div>
             </div>
         </form>
+
+        <div class="islamic-quotes" >
+            <h3>سورة البقرة (2:261):</h3>
+            <p>"جو لوگ اللہ کی راہ میں خرچ کرتے ہیں ان کی مثال اُس دانے کی طرح ہے جس سے سات بالیاں اُگتی ہیں، ہر بالی میں سو دانے ہوں، اور اللہ جس کو چاہے بڑھا دے۔"</p>
+            
+            <h3>حضرت محمد صلی اللہ علیہ وآلہ وسلم نے فرمایا:</h3>
+            <p>"جس شخص نے کسی کی مدد کی، اللہ تعالیٰ اُس کی مدد کرے گا، چاہے وہ مدد کسی چھوٹے کام میں ہو یا کسی بڑے کام میں۔"<br>
+            (صحیح بخاری)</p>
+        </div>
     </div>
 
     <script>
         let currentStep = 1;
         const totalSteps = 4;
         
-        function updateProgressBar(step) {
-            // Reset all steps
+        function updateProgressBar() {
+            // Update all step indicators
             for (let i = 1; i <= totalSteps; i++) {
-                document.getElementById(`step${i}-indicator`).classList.remove('active');
+                const stepIndicator = document.getElementById(`step${i}-indicator`);
+                stepIndicator.classList.remove('active', 'completed');
+                
+                if (i < currentStep) {
+                    stepIndicator.classList.add('completed');
+                } else if (i === currentStep) {
+                    stepIndicator.classList.add('active');
+                }
             }
-            
-            // Activate current step
-            document.getElementById(`step${step}-indicator`).classList.add('active');
         }
         
-        function nextStep(current) {
-            // Validate current step before proceeding
-            if (current === 1 && !document.getElementById('name').value) {
-                alert('Please enter your name');
-                return;
+        function validateStep(step) {
+            if (step === 1) {
+                const name = document.getElementById('name').value.trim();
+                if (!name) {
+                    alert('Please enter your name');
+                    return false;
+                }
+            } else if (step === 2) {
+                const bloodGroup = document.getElementById('blood_group').value;
+                if (!bloodGroup) {
+                    alert('Please select your blood group');
+                    return false;
+                }
+            } else if (step === 3) {
+                const contactNo = document.getElementById('contact_no').value.trim();
+                if (!contactNo) {
+                    alert('Please enter your contact number');
+                    return false;
+                }
             }
-            if (current === 2 && !document.getElementById('blood_group').value) {
-                alert('Please select your blood group');
-                return;
-            }
-            if (current === 3 && !document.getElementById('contact_no').value) {
-                alert('Please enter your contact number');
-                return;
-            }
+            return true;
+        }
+        
+        function nextStep() {
+            if (!validateStep(currentStep)) return;
             
             // Hide current step
-            document.getElementById(`step${current}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
             
             // Show next step
-            currentStep = current + 1;
+            currentStep++;
             document.getElementById(`step${currentStep}`).classList.add('active');
             
             // Update progress bar
-            updateProgressBar(currentStep);
+            updateProgressBar();
         }
         
-        function prevStep(current) {
+        function prevStep() {
             // Hide current step
-            document.getElementById(`step${current}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
             
             // Show previous step
-            currentStep = current - 1;
+            currentStep--;
             document.getElementById(`step${currentStep}`).classList.add('active');
             
             // Update progress bar
-            updateProgressBar(currentStep);
+            updateProgressBar();
         }
         
         // Form submission
         document.getElementById('donorForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Validate address
-            if (!document.getElementById('address').value) {
-                alert('Please enter your address');
-                return;
-            }
+            if (!validateStep(currentStep)) return;
             
             // Collect form data
             const formData = {
-                name: document.getElementById('name').value,
+                name: document.getElementById('name').value.trim(),
                 blood_group: document.getElementById('blood_group').value,
-                contact_no: document.getElementById('contact_no').value,
-                address: document.getElementById('address').value
+                contact_no: document.getElementById('contact_no').value.trim(),
+                address: document.getElementById('address').value.trim()
             };
             
             // Here you would typically send the data to a server
             console.log('Form submitted:', formData);
             
             // Show success message
-            alert('Thank you for registering as a blood donor!');
+            alert(`Thank you, ${formData.name}! Your blood donor registration is complete.`);
             
             // Reset form (optional)
             this.reset();
             document.getElementById(`step${currentStep}`).classList.remove('active');
             currentStep = 1;
             document.getElementById('step1').classList.add('active');
-            updateProgressBar(1);
+            updateProgressBar();
         });
     </script>
 </body>
-</html>
+</html>]
